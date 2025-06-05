@@ -10,59 +10,65 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 
+@Component
 public class Runner implements CommandLineRunner {
 
 
     @Autowired
-    private ApplicationContext ctx;
+    private ProdottoRepository prodottoRepository;
 
+    @Autowired
+    @Qualifier("cocaCola")
+    private Drink cocaCola;
 
     @Autowired
-    private PizzaRepository pizzaRepository;
-    @Autowired
-    private DrinkRepository drinkRepository;
-    @Autowired
-    private ToppingRepository toppingRepository;
-    @Autowired
-    private TavoliRepository tavoliRepository;
-    @Autowired
-    private OrdineRepository ordineRepository;
+    @Qualifier("water")
+    private Drink water;
 
+    @Autowired
+    @Qualifier("tomato")
+    private Topping tomato;
 
+    @Autowired
+    @Qualifier("mozzarella")
+    private Topping mozzarella;
+
+    @Autowired
+    @Qualifier("prosciuttoCotto")
+    private Topping prosciuttoCotto;
+
+    @Autowired
+    @Qualifier("margherita")
+    private Pizza margherita;
+
+    @Autowired
+    @Qualifier("primavera")
+    private Pizza primavera;
 
 
     @Override
     public void run(String... args) throws Exception {
 
-        Topping tomato = ctx.getBean("tomato", Topping.class);
-        Topping mozzarella = ctx.getBean("Mozzarella", Topping.class);
-        Topping prosciuttoCotto = ctx.getBean("prosciuttoCotto", Topping.class);
+        //salvo i drink
+        prodottoRepository.save(cocaCola);
+        prodottoRepository.save(water);
 
-        toppingRepository.saveAll(Arrays.asList(tomato,mozzarella,prosciuttoCotto));
+        //salvo le pizze
+        prodottoRepository.save(margherita);
+        prodottoRepository.save(primavera);
 
-        Pizza margherita = ctx.getBean("margherita", Pizza.class);
-        Pizza primavera = ctx.getBean("primavera", Pizza.class);
+        //setto le pizze sui topping e salvo i topping
+        mozzarella.setPizze(Arrays.asList(margherita,primavera));
+        tomato.setPizze(Arrays.asList(margherita,primavera));
+        prosciuttoCotto.setPizze(Arrays.asList(primavera));
 
-        pizzaRepository.saveAll(Arrays.asList(margherita,primavera));
-
-        Drink water = ctx.getBean("water", Drink.class);
-        Drink cocaCola = ctx.getBean("cocaCola", Drink.class);
-
-        drinkRepository.saveAll(Arrays.asList(water,cocaCola));
-
-        Tavolo t1 = ctx.getBean("t1", Tavolo.class);
-        Tavolo t2 = ctx.getBean("t2", Tavolo.class);
-
-        tavoliRepository.saveAll(Arrays.asList(t1,t2));
-
-
-        
-
-
-
+        prodottoRepository.save(mozzarella);
+        prodottoRepository.save(tomato);
+        prodottoRepository.save(prosciuttoCotto);
 
     }
 }

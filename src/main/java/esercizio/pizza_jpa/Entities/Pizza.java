@@ -1,9 +1,6 @@
 package esercizio.pizza_jpa.Entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -21,12 +18,7 @@ public class Pizza extends Prodotto{
     viene prima creata l'oggetto di tipo Pizza e poi viene iniettato in questo
     oggetto la lista di topping che ci sono nel contesto
      */
-    @ManyToMany
-    @JoinTable( // Specifica la tabella di join tra Pizza e Topping
-            name = "pizza_toppings",
-            joinColumns = @JoinColumn(name = "pizza_id"),
-            inverseJoinColumns = @JoinColumn(name = "topping_id")
-    )
+    @ManyToMany(mappedBy = "pizze", fetch = FetchType.EAGER)
     private List<Topping> toppings;
 
     //@Autowired(required = false)
